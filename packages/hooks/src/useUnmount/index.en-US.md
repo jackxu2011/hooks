@@ -1,17 +1,11 @@
 ---
-title: useUnmount
 nav:
-  title: Hooks
   path: /hooks
-group:
-  title: LifeCycle
-  path: /life-cycle
-  order: 9
 ---
 
 # useUnmount
 
-A hook that executes a function at unmount.
+A hook that executes the function right before the component is unmounted.
 
 ## Examples
 
@@ -29,4 +23,4 @@ useUnmount(fn: () => void);
 
 | Property | Description                      | Type         | Default |
 |----------|----------------------------------|--------------|---------|
-| fn       | the function need to be executed | `() => void` | -       |
+| fn       | The function to be executed | `() => void` | -       |

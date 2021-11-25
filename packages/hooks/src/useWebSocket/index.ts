@@ -1,7 +1,7 @@
-import useUnmount from '../useUnmount';
-import usePersistFn from '../usePersistFn';
-
 import { useEffect, useRef, useState } from 'react';
+import useLatest from '../useLatest';
+import useMemoizedFn from '../useMemoizedFn';
+import useUnmount from '../useUnmount';
 
 export enum ReadyState {
   Connecting = 0,
@@ -18,6 +18,8 @@ export interface Options {
   onClose?: (event: WebSocketEventMap['close']) => void;
   onMessage?: (message: WebSocketEventMap['message']) => void;
   onError?: (event: WebSocketEventMap['error']) => void;
+
+  protocols?: string | string[];
 }
 
 export interface Result {
@@ -38,111 +40,123 @@ export default function useWebSocket(socketUrl: string, options: Options = {}): 
     onClose,
     onMessage,
     onError,
+    protocols,
   } = options;
+
+  const onOpenRef = useLatest(onOpen);
+  const onCloseRef = useLatest(onClose);
+  const onMessageRef = useLatest(onMessage);
+  const onErrorRef = useLatest(onError);
 
   const reconnectTimesRef = useRef(0);
   const reconnectTimerRef = useRef<NodeJS.Timeout>();
   const websocketRef = useRef<WebSocket>();
 
+  const unmountedRef = useRef(false);
+
   const [latestMessage, setLatestMessage] = useState<WebSocketEventMap['message']>();
   const [readyState, setReadyState] = useState<ReadyState>(ReadyState.Closed);
 
-  /**
-   * 重连
-   */
-  const reconnect = usePersistFn(() => {
+  const reconnect = () => {
     if (
       reconnectTimesRef.current < reconnectLimit &&
       websocketRef.current?.readyState !== ReadyState.Open
     ) {
-      reconnectTimerRef.current && clearTimeout(reconnectTimerRef.current);
+      if (reconnectTimerRef.current) {
+        clearTimeout(reconnectTimerRef.current);
+      }
 
       reconnectTimerRef.current = setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         connectWs();
         reconnectTimesRef.current++;
       }, reconnectInterval);
     }
-  });
+  };
 
-  const connectWs = usePersistFn(() => {
-    reconnectTimerRef.current && clearTimeout(reconnectTimerRef.current);
+  const connectWs = () => {
+    if (reconnectTimerRef.current) {
+      clearTimeout(reconnectTimerRef.current);
+    }
 
     if (websocketRef.current) {
       websocketRef.current.close();
     }
 
-    try {
-      websocketRef.current = new WebSocket(socketUrl);
-      websocketRef.current.onerror = (event) => {
-        reconnect();
-        onError && onError(event);
-        setReadyState(websocketRef.current?.readyState || ReadyState.Closed);
-      };
-      websocketRef.current.onopen = (event) => {
-        onOpen && onOpen(event);
-        reconnectTimesRef.current = 0;
-        setReadyState(websocketRef.current?.readyState || ReadyState.Closed);
-      };
-      websocketRef.current.onmessage = (message: WebSocketEventMap['message']) => {
-        onMessage && onMessage(message);
-        setLatestMessage(message);
-      };
-      websocketRef.current.onclose = (event) => {
-        reconnect();
-        onClose && onClose(event);
-        setReadyState(websocketRef.current?.readyState || ReadyState.Closed);
-      };
-    } catch (error) {
-      throw error;
-    }
-  });
+    websocketRef.current = new WebSocket(socketUrl, protocols);
+    setReadyState(ReadyState.Connecting);
 
-  /**
-   * 发送消息
-   * @param message
-   */
-  const sendMessage: WebSocket['send'] = usePersistFn((message) => {
+    websocketRef.current.onerror = (event) => {
+      if (unmountedRef.current) {
+        return;
+      }
+      reconnect();
+      onErrorRef.current?.(event);
+      setReadyState(websocketRef.current?.readyState || ReadyState.Closed);
+    };
+    websocketRef.current.onopen = (event) => {
+      if (unmountedRef.current) {
+        return;
+      }
+      onOpenRef.current?.(event);
+      reconnectTimesRef.current = 0;
+      setReadyState(websocketRef.current?.readyState || ReadyState.Closed);
+    };
+    websocketRef.current.onmessage = (message: WebSocketEventMap['message']) => {
+      if (unmountedRef.current) {
+        return;
+      }
+      onMessageRef.current?.(message);
+      setLatestMessage(message);
+    };
+    websocketRef.current.onclose = (event) => {
+      if (unmountedRef.current) {
+        return;
+      }
+      reconnect();
+      onCloseRef.current?.(event);
+      setReadyState(websocketRef.current?.readyState || ReadyState.Closed);
+    };
+  };
+
+  const sendMessage: WebSocket['send'] = (message) => {
     if (readyState === ReadyState.Open) {
       websocketRef.current?.send(message);
     } else {
       throw new Error('WebSocket disconnected');
     }
-  });
+  };
 
-  /**
-   * 手动 connect
-   */
-  const connect = usePersistFn(() => {
+  const connect = () => {
     reconnectTimesRef.current = 0;
     connectWs();
-  });
+  };
 
-  /**
-   * disconnect websocket
-   */
-  const disconnect = usePersistFn(() => {
-    reconnectTimerRef.current && clearTimeout(reconnectTimerRef.current);
+  const disconnect = () => {
+    if (reconnectTimerRef.current) {
+      clearTimeout(reconnectTimerRef.current);
+    }
 
     reconnectTimesRef.current = reconnectLimit;
     websocketRef.current?.close();
-  });
+  };
 
   useEffect(() => {
-    // 初始连接
     if (!manual) {
       connect();
     }
   }, [socketUrl, manual]);
 
   useUnmount(() => {
+    unmountedRef.current = true;
     disconnect();
   });
 
   return {
     latestMessage,
-    sendMessage,
-    connect,
-    disconnect,
+    sendMessage: useMemoizedFn(sendMessage),
+    connect: useMemoizedFn(connect),
+    disconnect: useMemoizedFn(disconnect),
     readyState,
     webSocketIns: websocketRef.current,
   };

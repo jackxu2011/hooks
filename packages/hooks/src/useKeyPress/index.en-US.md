@@ -1,16 +1,11 @@
 ---
-title: useKeyPress
 nav:
-  title: Hooks
   path: /hooks
-group:
-  title: Dom
-  path: /dom
 ---
 
 # useKeyPress
 
-A hook that elegantly manages KeyboardEvent of keyup and keydown, Keyboard key combinations are supported to define key and keyCode alias input for keyboard events.
+Listen for the keyboard press, support key combinations, and support alias.
 
 ## Examples
 
@@ -18,15 +13,15 @@ A hook that elegantly manages KeyboardEvent of keyup and keydown, Keyboard key c
 
 <code src="./demo/demo1.tsx" />
 
-### Use key aliases
+### Combination keys
 
-<code src="./demo/demo2.tsx" />
+<code src="./demo/demo6.tsx" />
 
-### Compound mode
+### Multiple keys
 
 <code src="./demo/demo3.tsx" />
 
-### Advanced
+### Custom method
 
 <code src="./demo/demo4.tsx" />
 
@@ -37,49 +32,38 @@ A hook that elegantly manages KeyboardEvent of keyup and keydown, Keyboard key c
 ## API
 
 ```typescript
+type keyType = number | string;
+type KeyFilter = keyType | keyType[] | ((event: KeyboardEvent) => boolean);
+
 useKeyPress(
-  keyFilter: KeyFilter, 
-  eventHandler: EventHandler = noop, 
+  keyFilter: KeyFilter,
+  eventHandler: EventHandler,
   options?: Options
 )
 ```
 
 ### Params
 
-> Tips: keyType is the key or keyCode of KeyboardEvent.
-
-| Property | Description                                                        | Type                   | Default |
-|---------|----------------------------------------------|------------------------|--------|
-| keyFilter | Support for key and keyCode in keyboard events,function that return Boolean, key aliases  | `keyType` \| `Array<keyType>` \| `(event: KeyboardEvent) => boolean` | -      |
-| eventHandler | Callback Function  | `(event: KeyboardEvent) => void` | -      |
-| options | advanced options，see Options below | `Options`              | -              | 
+| Property     | Description                                                      | Type                                                            | Default |
+|--------------|------------------------------------------------------------------|-----------------------------------------------------------------|---------|
+| keyFilter    | Support keyCode、alias、combination keys、array、custom function | `keyType` \| `keyType[]` \| `(event: KeyboardEvent) => boolean` | -       |
+| eventHandler | Callback function                                                | `(event: KeyboardEvent) => void`                                | -       |
+| options      | advanced options                                                 | `Options`                                                       | -       |
 
 ### Options
 
-| Property | Description                                                        | Type                   | Default |
-|-----------------|--------------------------------------------------------|---------|--------|
-| events | Trigger Events  |  Array<keydown \| keyup\> | `['keydown']`     |
-| target | DOM element or Ref Object | `() => HTMLElement` \| `HTMLElement` \| `React.MutableRefObject`  | - |
+| Property | Description        | Type                                                        | Default       |
+|----------|--------------------|-------------------------------------------------------------|---------------|
+| events   | Trigger Events     | `('keydown' \| 'keyup')[]`                                  | `['keydown']` |
+| target   | DOM element or ref | `() => Element` \| `Element` \| `MutableRefObject<Element>` | -             |
 
 ## Remarks
 
-1.All key aliases
+1. All key alias refer to [代码](TODO)
 
-```javascript
-enter
-tab
-delete ('Backspace', 'Delete')
-esc
-space
-up
-down
-left
-right
-```
+2. Modifier keys
 
-2.Modifier keys
-
-```javascript
+```text
 ctrl
 alt
 shift

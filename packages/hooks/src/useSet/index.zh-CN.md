@@ -1,16 +1,11 @@
 ---
-title: useSet
 nav:
-  title: Hooks
   path: /hooks
-group:
-  title: State
-  path: /state
 ---
 
 # useSet
 
-一个可以管理 Set 类型状态的 Hook。
+管理 Set 类型状态的 Hook。
 
 ## 代码演示
 
@@ -23,7 +18,6 @@ const [
   set,
   {
     add,
-    has,
     remove,
     reset
   }
@@ -32,13 +26,12 @@ const [
 
 ### Result
 
-| 参数   | 说明             | 类型                    |
-|--------|------------------|-------------------------|
-| set    | Set 对象         | `Set`                   |
-| add    | 添加元素         | `(key: any) => void`    |
-| has    | 判断是否存在元素 | `(key: any) => Boolean` |
-| remove | 移除元素         | `(key: any) => void`    |
-| reset  | 重置为默认值     | `() => void`            |
+| 参数   | 说明         | 类型                 |
+|--------|--------------|----------------------|
+| set    | Set 对象     | `Set`                |
+| add    | 添加元素     | `(key: any) => void` |
+| remove | 移除元素     | `(key: any) => void` |
+| reset  | 重置为默认值 | `() => void`         |
 
 ### Params
 

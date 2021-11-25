@@ -1,16 +1,11 @@
 ---
-title: useMouse
 nav:
-  title: Hooks
   path: /hooks
-group:
-  title: Dom
-  path: /dom
 ---
 
 # useMouse
 
-一个跟踪鼠标位置的 Hook
+监听鼠标位置
 
 ## 代码演示
 
@@ -31,7 +26,7 @@ const state: {
 } = useMouse();
 ```
 
-### 结果
+### Result
 
 | 参数    | 说明                   | 类型     |
 |---------|------------------------|----------|

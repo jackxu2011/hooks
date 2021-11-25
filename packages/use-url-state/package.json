@@ -1,6 +1,6 @@
 {
   "name": "@ahooksjs/use-url-state",
-  "version": "2.5.9",
+  "version": "3.0.0-alpha.14",
   "description": "A hook that stores the state into url query parameters.",
   "main": "./lib/index.js",
   "module": "./es/index.js",
@@ -29,11 +29,10 @@
   "homepage": "https://github.com/alibaba/hooks",
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0",
-    "react-router": "^5.0.0"
+    "react-router": "^5.0.0 || ^6.0.0"
   },
   "dependencies": {
-    "@types/query-string": "^6.3.0",
-    "core-js": "^2.6.12",
+    "ahooks": "^3.0.0-alpha.14",
     "query-string": "^6.9.0"
   }
 }

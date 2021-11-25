@@ -15,9 +15,11 @@
     "test": "jest",
     "lint": "eslint --ignore-pattern **/__tests__/* --ignore-pattern **/demo/* \"packages/*/src/**/*.{ts,tsx}\"",
     "build:doc": "dumi build",
-    "pub:doc": "surge ./dist --domain ahooks.js.org",
-    "pub:doc-gitee": "cd ./dist && rm -rf .git && touch .spa && touch .nojekyll && git init && git remote add origin git@gitee.com:ahooks/ahooks.git && git add -A && git commit -m \"publish docs\" && git push origin master -f",
-    "pub": "lerna publish"
+    "pub:doc-surge": "surge ./dist --domain ahooks-next.surge.sh",
+    "pub:doc-gitee": "cd ./dist && rm -rf .git && touch .spa && touch .nojekyll && git init && git remote add origin git@gitee.com:ahooks/ahooks-next.git && git add -A && git commit -m \"publish docs\" && git push origin master -f",
+    "pub:doc": "yarn run build:doc && yarn run pub:doc-surge && yarn run pub:doc-gitee",
+    "pub": "yarn run build && lerna publish",
+    "pub:beta": "yarn run build && lerna publish --dist-tag beta"
   },
   "husky": {
     "hooks": {
@@ -25,6 +27,7 @@
     }
   },
   "devDependencies": {
+    "@ant-design/icons": "^4.6.2",
     "@babel/cli": "^7.10.1",
     "@babel/core": "^7.10.2",
     "@testing-library/react": "^10.0.4",
@@ -38,6 +41,7 @@
     "antd": "^4.3.3",
     "babel-loader": "^8.1.0",
     "babel-plugin-import": "^1.12.0",
+    "babel-plugin-transform-async-to-promises": "^0.8.15",
     "del": "^5.1.0",
     "dumi": "^1.1.7",
     "enzyme": "^3.10.0",
@@ -49,7 +53,7 @@
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "jest-fetch-mock": "^3.0.3",
-    "lerna": "^2.11.0",
+    "lerna": "4.x",
     "mockdate": "^3.0.2",
     "mockjs": "^1.1.0",
     "prettier": "^2.0.5",

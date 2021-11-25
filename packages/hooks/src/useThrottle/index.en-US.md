@@ -1,17 +1,11 @@
 ---
-title: useThrottle
 nav:
-  title: Hooks
   path: /hooks
-group:
-  title: SideEffect
-  path: /side-effect
-  order: 7
 ---
 
 # useThrottle
 
-A hook that handle the throttle value.
+A hook that deal with the throttled value.
 
 ## Examples
 
@@ -30,10 +24,10 @@ const throttledValue = useThrottle(
 
 ### Params
 
-| Property | Description                                                  | Type      | Default |
-|----------|--------------------------------------------------------------|-----------|---------|
-| value    | value that requires throttle                                 | `any`     | -       |
-| options  | Config the throttle behavior. See the Options section below. | `Options` | `{}`    |
+| Property | Description                        | Type      | Default |
+|----------|------------------------------------|-----------|---------|
+| value    | The value to throttle.             | `any`     | -       |
+| options  | Config for the throttle behaviors. | `Options` | -       |
 
 ### Options
 

@@ -1,11 +1,6 @@
 ---
-title: useEventTarget
 nav:
-  title: Hooks
   path: /hooks
-group:
-  title: Dom
-  path: /dom
 ---
 
 # useEventTarget
@@ -18,23 +13,23 @@ group:
 
 <code src="./demo/demo1.tsx" />
 
-### 自定义值切换
+### 自定义转换函数
 
 <code src="./demo/demo2.tsx" />
 
 ## API
 
 ```typescript
-const [value, { onChange, reset }  ] = useEventTarget<T, U>(Options);
+const [value, { onChange, reset }  ] = useEventTarget<T, U>(Options<T, U>);
 ```
 
 ### Result
 
-| 参数     | 说明                         | 类型               |
-|----------|------------------------------|--------------------|
-| value    | 表单控件的值                 | `T`                |
-| onChange | 表单控件值发生变化时候的回调 | `(e: { target: { value: T }}) => void` |
-| reset    | 重置函数                     | `() => void`       |
+| 参数     | 说明                         | 类型                                   |
+|----------|------------------------------|----------------------------------------|
+| value    | 表单控件的值                 | `T`                                    |
+| onChange | 表单控件值发生变化时候的回调 | `(e: { target: { value: T } }) => void` |
+| reset    | 重置函数                     | `() => void`                           |
 
 ### Options
 

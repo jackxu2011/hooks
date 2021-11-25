@@ -1,12 +1,6 @@
 ---
-title: useEventEmitter
 nav:
-  title: Hooks
   path: /hooks
-group:
-  title: Advanced
-  path: /advanced
-legacy: /advanced/use-event-emitter
 ---
 
 # useEventEmitter

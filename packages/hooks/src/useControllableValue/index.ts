@@ -1,5 +1,6 @@
-import { useCallback, useState } from 'react';
-import useUpdateEffect from '../useUpdateEffect';
+import { useMemo, useRef } from 'react';
+import useMemoizedFn from '../useMemoizedFn';
+import useUpdate from '../useUpdate';
 
 export interface Options<T> {
   defaultValue?: T;
@@ -8,15 +9,14 @@ export interface Options<T> {
   trigger?: string;
 }
 
-export interface Props {
-  [key: string]: any;
-}
+export type Props = Record<string, any>;
 
-interface StandardProps<T> {
+export interface StandardProps<T> {
   value: T;
   defaultValue?: T;
   onChange: (val: T) => void;
 }
+
 function useControllableValue<T = any>(props: StandardProps<T>): [T, (val: T) => void];
 function useControllableValue<T = any>(
   props?: Props,
@@ -31,37 +31,36 @@ function useControllableValue<T = any>(props: Props = {}, options: Options<T> = 
   } = options;
 
   const value = props[valuePropName] as T;
+  const isControlled = valuePropName in props;
 
-  const [state, setState] = useState<T>(() => {
-    if (valuePropName in props) {
+  const initialValue = useMemo(() => {
+    if (isControlled) {
       return value;
     }
     if (defaultValuePropName in props) {
       return props[defaultValuePropName];
     }
     return defaultValue;
-  });
+  }, []);
 
-  /* init 的时候不用执行了 */
-  useUpdateEffect(() => {
-    if (valuePropName in props) {
-      setState(value);
+  const stateRef = useRef(initialValue);
+  if (isControlled) {
+    stateRef.current = value;
+  }
+
+  const update = useUpdate();
+
+  const setState = (v: T, ...args: any[]) => {
+    if (!isControlled) {
+      stateRef.current = v;
+      update();
     }
-  }, [value, valuePropName]);
+    if (props[trigger]) {
+      props[trigger](v, ...args);
+    }
+  };
 
-  const handleSetState = useCallback(
-    (v: T, ...args: any[]) => {
-      if (!(valuePropName in props)) {
-        setState(v);
-      }
-      if (props[trigger]) {
-        props[trigger](v, ...args);
-      }
-    },
-    [props, valuePropName, trigger],
-  );
-
-  return [valuePropName in props ? value : state, handleSetState] as const;
+  return [stateRef.current, useMemoizedFn(setState)] as const;
 }
 
 export default useControllableValue;

@@ -1,96 +1,78 @@
+<p align="center">
+  <a href="https://ahooks.js.org">
+    <img width="200" src="https://ahooks.js.org/logo.svg">
+  </a>
+</p>
+
+<div align="center">
+
+一套高质量可靠的 React Hooks 库
+
+[![NPM version next][image-1]][1]
+[![NPM downloads][image-2]][2]
+![gzip size](https://img.badgesize.io/https:/unpkg.com/ahooks@next/dist/ahooks.js?label=gzip%20size&compression=gzip)
+![GitHub](https://img.shields.io/github/license/alibaba/hooks)
+
 [English](https://github.com/alibaba/hooks/blob/master/README.md) | 简体中文
 
-# ahooks
+</div>
 
-React Hooks Library.
-
-[![NPM version][image-1]][1] [![NPM downloads][image-2]][2]
+> :warning: 当前是 v3 版本，如果你想找 v2 版本，去这里 <a href="https://github.com/alibaba/hooks/tree/release/v2.x" target="_blank">https://github.com/alibaba/hooks/tree/release/v2.x</a>
 
 ## 📚 文档
 
-- [English](https://ahooks.js.org/)
-- [中文](https://ahooks.js.org/zh-CN/)
+- [English](https://ahooks-next.surge.sh/)
+- [中文](https://ahooks-next.surge.sh/zh-CN/)
 
 ## ✨ 特性
 
 - 易学易用
-- 包含大量提炼自应用的高级 Hooks。
-- 包含丰富的基础 Hooks。
-- 使用 TypeScript 构建，提供完整的类型定义文件。
+- 支持 SSR
+- 对输入输出函数做了特殊处理，避免闭包问题
+- 包含大量提炼自业务的高级 Hooks
+- 包含丰富的基础 Hooks
+- 使用 TypeScript 构建，提供完整的类型定义文件
 
 ## 📦 安装
 
-```
-npm i ahooks --save
+```bash
+$ npm install --save ahooks@next
+# or
+$ yarn add ahooks@next
 ```
 
 ## 🔨 使用
 
-```
+```js
 import { useRequest } from 'ahooks';
 ```
 
-## 开发团队
+## 💻 在线体验
 
-<table>
-  <tbody>
-    <tr>
-      <td align="center">
-        <a target="_blank" href="https://github.com/alibaba/ice">
-          <img
-            width="32"
-            src="https://img.alicdn.com/tfs/TB1Jd.tb79l0K4jSZFKXXXFjpXa-482-264.png"
-          />
-          <br>
-          <strong>icejs</strong>
-        </a>
-      </td>
-      <td align="center">
-        <a target="_blank" href="https://github.com/umijs/umi">
-          <img
-            width="32"
-            style="vertical-align: -0.32em; margin-right: 8px;"
-            src="https://img.alicdn.com/tfs/TB1fhqaLAT2gK0jSZFkXXcIQFXa-132-130.png"
-          />
-          <br>
-          <strong>UmiJS</strong>
-        </a>
-      </td>
-       <td align="center">
-        <a target="_blank" href="https://www.alisports.com/">
-          <img
-            width="32"
-            style="vertical-align: -0.32em; margin-right: 8px;"
-            src="https://gw.alicdn.com/tfs/TB13XKjLuL2gK0jSZFmXXc7iXXa-205-59.png"
-          />
-          <br>
-          <strong>阿里体育</strong>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+[![Edit demo for ahooks](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/demo-for-ahooks-forked-fg79k?file=/src/App.js)
 
-## 🤝 参与贡献
+## 🤝 参与共建
 
-```
+```bash
 $ git clone git@github.com:alibaba/hooks.git
 $ cd hooks
 $ yarn run init
 $ yarn start
 ```
 
-打开浏览器访问 http://127.0.0.1:8001
+打开浏览器访问 http://127.0.0.1:8000
 
-我们欢迎所有人参与共建，请参考[CONTRIBUTING.MD](https://github.com/alibaba/hooks/blob/master/CONTRIBUTING.MD)
+我们欢迎所有人参与共建，请参考[CONTRIBUTING.MD](https://github.com/alibaba/hooks/blob/master/CONTRIBUTING.zh-CN.md)
+
+感谢所有贡献者：
+
+<a href="https://github.com/alibaba/hooks/graphs/contributors">
+  <img src="https://opencollective.com/ahooks/contributors.svg?width=960&button=false" alt="contributors" />
+</a>
 
 ## 👥 交流讨论
 
-<img src="https://raw.githubusercontent.com/umijs/hooks/master/dingtalk.jpg" width="300" />
-
-## ✅ License
-
-[MIT](https://github.com/alibaba/hooks/blob/master/LICENSE)
+<img src="https://user-images.githubusercontent.com/12526493/141303172-68f25577-c7b7-4ff7-bdff-25fd0f4d5214.JPG" width="300" />
 
 [1]: https://www.npmjs.com/package/ahooks
 [2]: https://npmjs.org/package/ahooks
